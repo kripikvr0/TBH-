@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f1419">
+  <meta name="description" content="TBH — Get anonymous messages from your friends. Share your link and receive honest messages!">
+  <title>TBH — Anonymous Messages</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- OG Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TBH — Send me anonymous messages!">
+  <meta property="og:description" content="Get anonymous messages from your friends. Be honest, be real. 💌">
+  <meta property="og:image" content="icon-512.png">
+  <meta property="og:url" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TBH — Send me anonymous messages!">
+  <meta name="twitter:description" content="Get anonymous messages from your friends. Be honest, be real. 💌">
+  <meta name="twitter:image" content="icon-512.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fredoka+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Success animation overlay -->
+  <div class="success-overlay" id="success-overlay">
+    <div class="success-icon">✨</div>
+    <p class="success-text">Message Sent!</p>
+  </div>
+
+  <!-- SVG Defs -->
+  <svg width="0" height="0"><defs><linearGradient id="gradLogo" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ec4899"/><stop offset="100%" style="stop-color:#f97316"/></linearGradient></defs></svg>
+
+  <!-- 1. SPLASH -->
+  <div class="scr active" id="splash">
+    <svg class="logo-svg" viewBox="0 0 240 240">
+      <path class="squircle" d="M120,10 C180,10 220,20 228,60 C236,100 236,140 228,180 C220,220 180,230 120,230 C60,230 20,220 12,180 C4,140 4,100 12,60 C20,20 60,10 120,10Z"/>
+      <text x="122" y="152" class="logo-text logo-shadow" text-anchor="middle">TBH.</text>
+      <text x="120" y="150" class="logo-text logo-stroke" text-anchor="middle" fill="none">TBH.</text>
+      <text x="120" y="150" class="logo-text" text-anchor="middle">TBH.</text>
+    </svg>
+    <h1>tbh</h1>
+    <p>Get anonymous messages<br>from your friends</p>
+    <button class="btn-pill btn-white" id="btn-get-started">Get Started!</button>
+    <p class="terms">By continuing, you agree to our Terms of Use and Privacy Policy</p>
+  </div>
+
+  <!-- 2. PLATFORM -->
+  <div class="scr" id="platform">
+    <div class="topbar">
+      <button class="btn-back" id="btn-back-platform">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+    </div>
+    <div class="plat-wrap">
+      <h2>Where do you want<br>to use TBH?</h2>
+      <div class="plat-list" id="plat-list">
+        <button class="plat-btn active" data-platform="instagram"><span class="plat-icon" style="background:linear-gradient(135deg,#ec4899,#f97316);">📷</span>Instagram<div class="radio"></div></button>
+        <button class="plat-btn" data-platform="snapchat"><span class="plat-icon" style="background:#FFFC00;color:#000;">👻</span>Snapchat<div class="radio"></div></button>
+        <button class="plat-btn" data-platform="whatsapp"><span class="plat-icon" style="background:#25D366;">💬</span>WhatsApp<div class="radio"></div></button>
+      </div>
+      <button class="btn-pill btn-white" id="btn-plat-continue" style="max-width:340px;">Continue</button>
+    </div>
+  </div>
+
+  <!-- 3. USERNAME -->
+  <div class="scr" id="username">
+    <div class="topbar">
+      <button class="btn-back" id="btn-back-username">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+    </div>
+    <div class="user-wrap">
+      <h2>Choose a username</h2>
+      <div class="inp-wrap"><span class="at">@</span><input type="text" id="inp-user" placeholder="username" maxlength="20" autocomplete="off"></div>
+      <p class="username-hint" id="username-hint">Only letters, numbers, dots & underscores</p>
+      <button class="btn-black" id="btn-cont" style="max-width:340px;" disabled>Continue</button>
+    </div>
+  </div>
+
+  <!-- 4. PROFILE -->
+  <div class="scr" id="profile">
+    <div class="topbar topbar-split">
+      <button class="btn-back" id="btn-back-profile">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <button class="btn-skip" id="btn-skip-profile">skip</button>
+    </div>
+    <div class="prof-wrap">
+      <h2>Choose a profile<br>picture</h2>
+      <div class="av-wrap"><div class="av-main" id="prof-av">👤</div><div class="av-plus">+</div></div>
+      <button class="btn-pill btn-white" id="btn-choose-photo" style="max-width:340px;">Choose photo</button>
+    </div>
+  </div>
+
+  <!-- 5. HOME -->
+  <div class="scr" id="home">
+    <div class="top-tabs">
+      <a class="active" data-tab="play">PLAY</a>
+      <a data-tab="inbox">INBOX</a>
+      <button class="top-gear" id="btn-gear">⚙️</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding-bottom:100px;">
+      <div class="main-card">
+        <div class="card-top">
+          <div class="card-avatar" id="card-av">K<div class="edit-badge">✏️</div></div>
+          <p>send me anonymous<br>messages!</p>
+        </div>
+        <div class="card-bot">
+          <button id="btn-random">🎲</button>
+          <button id="btn-refresh">↻</button>
+        </div>
+      </div>
+      <!-- Peer Status -->
+      <div class="peer-status" id="peer-status">
+        <span class="peer-dot offline"></span>
+        <span class="peer-label">Connecting…</span>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Step 1: Copy your link</h3>
+          <p id="link-text">TBH.LINK/KRIPIK</p>
+          <button class="btn-outline" id="btn-copy-link">🔗 copy link</button>
+        </div>
+        <div class="step">
+          <h3>Step 2: Share link on your story</h3>
+          <button class="btn-grad" id="btn-share-story">📷 Share!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. INBOX -->
+  <div class="scr" id="inbox">
+    <div class="top-tabs">
+      <a data-tab="play">PLAY</a>
+      <a class="active" data-tab="inbox">INBOX</a>
+      <button class="top-gear" id="btn-gear-inbox">⚙️</button>
+    </div>
+    <div class="inbox-wrap" id="inbox-content">
+      <h2>Your inbox is empty</h2>
+      <p>Share your link to get questions in your inbox!</p>
+      <div class="grid-deco"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      <button class="btn-black" id="btn-get-msgs">Get messages!</button>
+    </div>
+  </div>
+
+  <!-- 9. DETAIL -->
+  <div class="scr" id="detail">
+    <div class="detail-wrap">
+      <div class="detail-top">
+        <div class="plat-pill"><span class="active">📷</span><span>👻</span><span>💬</span></div>
+        <button class="close-x" id="btn-close-detail">✕</button>
+      </div>
+      <div class="detail-card">
+        <div class="detail-top2"><p>send me anonymous<br>messages!</p></div>
+        <div class="detail-bot"><p id="detail-text">Message here...</p></div>
+      </div>
+      <div class="detail-actions"><span>🎨</span><span>📷</span></div>
+      <p class="detail-note">Sent with ❤️ from team TBH</p>
+      <button class="btn-black" id="btn-reply-detail">📷 reply</button>
+    </div>
+  </div>
+
+  <!-- 10. SETTINGS -->
+  <div class="scr" id="settings">
+    <div class="topbar topbar-center">
+      <button class="btn-back" id="btn-back-settings">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <h1 class="topbar-title">Settings</h1>
+    </div>
+    <div class="set-wrap">
+      <div class="set-section">
+        <div class="set-header">⭐ Preferences</div>
+        <div class="set-item" id="set-notifications"><div class="set-icon">🔔</div><div class="set-info"><h4>Notifications</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="set-appearance"><div class="set-icon">🌙</div><div class="set-info"><h4>Appearance</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="set-team-tbh"><div class="set-icon">❤️</div><div class="set-info"><h4>Team TBH messages</h4></div><span class="set-chev">›</span></div>
+      </div>
+      <div class="set-section">
+        <div class="set-header">⚠️ Safety controls</div>
+        <div class="set-item" id="set-hidden-words"><div class="set-icon" style="font-size:14px;font-weight:800;">Aa</div><div class="set-info"><h4>Hidden words</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="set-blocked"><div class="set-icon">🚫</div><div class="set-info"><h4>Blocked users</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="set-pause"><div class="set-icon">✋</div><div class="set-info"><h4>Pause my link</h4><p class="set-sub" id="pause-status">Active</p></div><div class="set-toggle" id="pause-toggle"><div class="tog" id="tog-pause"><div class="tog-k"></div></div></div></div>
+        <div class="set-item" id="set-filter"><div class="set-icon">⭐</div><div class="set-info"><h4>Advanced message filtering</h4></div><span class="set-chev">›</span></div>
+      </div>
+      <div class="set-section">
+        <div class="set-header">🏠 More</div>
+        <div class="set-item" id="set-help"><div class="set-icon">⚽</div><div class="set-info"><h4>I need help</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="set-safety"><div class="set-icon">✅</div><div class="set-info"><h4>Safety resources</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="set-terms"><div class="set-icon">🐱</div><div class="set-info"><h4>Terms of use</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="set-privacy"><div class="set-icon">🔒</div><div class="set-info"><h4>Privacy policy</h4></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="btn-delete-account"><div class="set-icon">🗑️</div><div class="set-info"><h4 class="red">Delete account</h4></div><span class="set-chev">›</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S1. NOTIFICATIONS -->
+  <div class="scr" id="scr-notifications">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Notifications</h1>
+    </div>
+    <div class="sub-wrap">
+      <div class="set-section">
+        <div class="set-header">Push Notifications</div>
+        <div class="set-item"><div class="set-icon">💌</div><div class="set-info"><h4>New messages</h4><p class="set-sub">Get notified when someone sends you a message</p></div><div class="tog on" id="tog-notif-msg"><div class="tog-k"></div></div></div>
+        <div class="set-item"><div class="set-icon">🔥</div><div class="set-info"><h4>Hot streaks</h4><p class="set-sub">When your inbox is blowing up</p></div><div class="tog" id="tog-notif-streak"><div class="tog-k"></div></div></div>
+        <div class="set-item"><div class="set-icon">📢</div><div class="set-info"><h4>TBH updates</h4><p class="set-sub">News and product announcements</p></div><div class="tog on" id="tog-notif-news"><div class="tog-k"></div></div></div>
+      </div>
+      <p class="sub-note">Note: Push notifications require a native app or PWA installation.</p>
+    </div>
+  </div>
+
+  <!-- S2. APPEARANCE -->
+  <div class="scr" id="scr-appearance">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Appearance</h1>
+    </div>
+    <div class="sub-wrap">
+      <div class="set-section">
+        <div class="set-header">Theme</div>
+        <div class="theme-grid">
+          <div class="theme-btn active" data-theme="dark" id="theme-dark">
+            <div class="theme-preview" style="background:#0f1419;"><div class="theme-preview-card" style="background:#1f2937;"></div></div>
+            <span>Dark</span>
+          </div>
+          <div class="theme-btn" data-theme="light" id="theme-light">
+            <div class="theme-preview" style="background:#f8fafc;"><div class="theme-preview-card" style="background:#e2e8f0;"></div></div>
+            <span>Light</span>
+          </div>
+          <div class="theme-btn" data-theme="midnight" id="theme-midnight">
+            <div class="theme-preview" style="background:#0a0a1a;"><div class="theme-preview-card" style="background:#1a1a3e;"></div></div>
+            <span>Midnight</span>
+          </div>
+        </div>
+      </div>
+      <div class="set-section">
+        <div class="set-header">Accent Color</div>
+        <div class="color-grid">
+          <div class="color-dot active" data-color="pink" style="background:linear-gradient(135deg,#ec4899,#f97316);"></div>
+          <div class="color-dot" data-color="blue" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);"></div>
+          <div class="color-dot" data-color="green" style="background:linear-gradient(135deg,#10b981,#06b6d4);"></div>
+          <div class="color-dot" data-color="red" style="background:linear-gradient(135deg,#ef4444,#f97316);"></div>
+          <div class="color-dot" data-color="purple" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3. TEAM TBH MESSAGES -->
+  <div class="scr" id="scr-team-tbh">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Team TBH</h1>
+    </div>
+    <div class="sub-wrap">
+      <div class="tbh-team-card">
+        <div class="tbh-team-icon">❤️</div>
+        <h3>Messages from Team TBH</h3>
+        <p>We occasionally send you tips, feature announcements, and heartfelt messages. You can control what you receive below.</p>
+      </div>
+      <div class="set-section">
+        <div class="set-item"><div class="set-icon">💡</div><div class="set-info"><h4>Tips & tricks</h4><p class="set-sub">How to get more messages</p></div><div class="tog on" id="tog-team-tips"><div class="tog-k"></div></div></div>
+        <div class="set-item"><div class="set-icon">🎉</div><div class="set-info"><h4>Feature announcements</h4><p class="set-sub">New stuff we ship</p></div><div class="tog on" id="tog-team-feat"><div class="tog-k"></div></div></div>
+        <div class="set-item"><div class="set-icon">💌</div><div class="set-info"><h4>Heartfelt messages</h4><p class="set-sub">A little love from us</p></div><div class="tog" id="tog-team-love"><div class="tog-k"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4. HIDDEN WORDS -->
+  <div class="scr" id="scr-hidden-words">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Hidden Words</h1>
+    </div>
+    <div class="sub-wrap">
+      <p class="sub-desc">Messages containing these words will be automatically hidden from your inbox.</p>
+      <div class="hw-input-row">
+        <input type="text" id="hw-input" placeholder="Add a word or phrase..." class="hw-input">
+        <button class="hw-add-btn" id="hw-add">Add</button>
+      </div>
+      <div class="hw-tags" id="hw-tags"></div>
+      <p class="sub-note">Words are saved locally on your device.</p>
+    </div>
+  </div>
+
+  <!-- S5. BLOCKED USERS -->
+  <div class="scr" id="scr-blocked">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Blocked Users</h1>
+    </div>
+    <div class="sub-wrap">
+      <div class="hw-input-row">
+        <input type="text" id="block-input" placeholder="Enter username to block..." class="hw-input">
+        <button class="hw-add-btn" id="block-add">Block</button>
+      </div>
+      <div id="blocked-list" class="hw-tags"></div>
+      <p class="sub-note">Blocked users cannot send you messages (based on their peer ID).</p>
+    </div>
+  </div>
+
+  <!-- S6. ADVANCED FILTER -->
+  <div class="scr" id="scr-filter">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Message Filtering</h1>
+    </div>
+    <div class="sub-wrap">
+      <div class="set-section">
+        <div class="set-header">Auto-Filter</div>
+        <div class="set-item"><div class="set-icon">🤬</div><div class="set-info"><h4>Filter offensive language</h4><p class="set-sub">Automatically hides toxic messages</p></div><div class="tog on" id="tog-filter-toxic"><div class="tog-k"></div></div></div>
+        <div class="set-item"><div class="set-icon">🔗</div><div class="set-info"><h4>Filter links & URLs</h4><p class="set-sub">Hide messages containing links</p></div><div class="tog" id="tog-filter-links"><div class="tog-k"></div></div></div>
+        <div class="set-item"><div class="set-icon">📱</div><div class="set-info"><h4>Filter phone numbers</h4><p class="set-sub">Hide messages with phone numbers</p></div><div class="tog on" id="tog-filter-phone"><div class="tog-k"></div></div></div>
+        <div class="set-item"><div class="set-icon">💬</div><div class="set-info"><h4>Minimum message length</h4><p class="set-sub">Hide very short messages (under 5 chars)</p></div><div class="tog" id="tog-filter-short"><div class="tog-k"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S7. HELP -->
+  <div class="scr" id="scr-help">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">I Need Help</h1>
+    </div>
+    <div class="sub-wrap">
+      <div class="help-hero">🆘</div>
+      <div class="set-section">
+        <div class="set-item" id="help-report"><div class="set-icon">🚩</div><div class="set-info"><h4>Report a problem</h4><p class="set-sub">Bug, abuse, or something wrong</p></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="help-faq"><div class="set-icon">❓</div><div class="set-info"><h4>FAQ</h4><p class="set-sub">Frequently asked questions</p></div><span class="set-chev">›</span></div>
+        <div class="set-item" id="help-contact"><div class="set-icon">✉️</div><div class="set-info"><h4>Contact us</h4><p class="set-sub">support@tbh.app</p></div><span class="set-chev">›</span></div>
+      </div>
+      <button class="btn-outline" id="help-email-btn" style="margin-top:8px;">✉️ Email Support</button>
+    </div>
+  </div>
+
+  <!-- S8. SAFETY RESOURCES -->
+  <div class="scr" id="scr-safety">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Safety Resources</h1>
+    </div>
+    <div class="sub-wrap">
+      <div class="help-hero">🛡️</div>
+      <p class="sub-desc">Your mental health and safety matter to us. Here are some resources that can help.</p>
+      <div class="set-section">
+        <div class="set-item"><div class="set-icon">🧠</div><div class="set-info"><h4>Into The Light Indonesia</h4><p class="set-sub">intothelightid.org · Suicide prevention</p></div><span class="set-chev">›</span></div>
+        <div class="set-item"><div class="set-icon">💚</div><div class="set-info"><h4>Yayasan Pulih</h4><p class="set-sub">yayasanpulih.org · Mental health support</p></div><span class="set-chev">›</span></div>
+        <div class="set-item"><div class="set-icon">📞</div><div class="set-info"><h4>Hotline Kesehatan Jiwa</h4><p class="set-sub">119 ext 8 · 24/7 helpline</p></div><span class="set-chev">›</span></div>
+        <div class="set-item"><div class="set-icon">🌐</div><div class="set-info"><h4>Crisis Text Line</h4><p class="set-sub">crisistextline.org</p></div><span class="set-chev">›</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S9. TERMS -->
+  <div class="scr" id="scr-terms">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Terms of Use</h1>
+    </div>
+    <div class="sub-wrap legal-wrap">
+      <p class="legal-date">Last updated: May 2026</p>
+      <h3>1. Acceptance of Terms</h3>
+      <p>By using TBH, you agree to these Terms. If you do not agree, do not use this app.</p>
+      <h3>2. Your Content</h3>
+      <p>You are solely responsible for messages you send. Do not send harmful, threatening, or illegal content. TBH reserves the right to remove content that violates these terms.</p>
+      <h3>3. Privacy</h3>
+      <p>TBH uses a peer-to-peer architecture. Messages are sent directly between peers. We do not store your messages on a central server.</p>
+      <h3>4. Prohibited Use</h3>
+      <p>You may not use TBH for harassment, bullying, spam, or any illegal activity. Violations may result in account termination.</p>
+      <h3>5. Disclaimer</h3>
+      <p>TBH is provided "as is" without warranty. We are not responsible for content sent by other users.</p>
+      <h3>6. Changes</h3>
+      <p>We may update these Terms at any time. Continued use of the app constitutes acceptance of the new Terms.</p>
+    </div>
+  </div>
+
+  <!-- S10. PRIVACY -->
+  <div class="scr" id="scr-privacy">
+    <div class="topbar topbar-center">
+      <button class="btn-back sub-back"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>
+      <h1 class="topbar-title">Privacy Policy</h1>
+    </div>
+    <div class="sub-wrap legal-wrap">
+      <p class="legal-date">Last updated: May 2026</p>
+      <h3>1. Data We Collect</h3>
+      <p>TBH only stores your username and app preferences locally on your device using localStorage. We do not have a central database of users.</p>
+      <h3>2. Peer-to-Peer Messaging</h3>
+      <p>Messages are sent directly between users via WebRTC (PeerJS). The PeerJS signaling server is only used to establish connections — your message content is never seen by us.</p>
+      <h3>3. No Tracking</h3>
+      <p>We do not use analytics, cookies, or any third-party tracking tools.</p>
+      <h3>4. Data Deletion</h3>
+      <p>You can delete all your local data at any time via Settings → Delete account. This immediately clears all stored data from your device.</p>
+      <h3>5. Contact</h3>
+      <p>Questions? Email us at privacy@tbh.app</p>
+    </div>
+  </div>
+
+  <!-- 11. SEND -->
+  <div class="scr" id="send">
+    <div class="topbar topbar-center">
+      <div class="plat-pill"><span class="active">📷</span><span>👻</span><span>💬</span></div>
+    </div>
+    <div class="send-wrap">
+      <div class="send-card">
+        <div class="send-top"><p>send me anonymous<br>messages!</p></div>
+        <div class="send-bot"><p id="send-to">to @kripik</p></div>
+      </div>
+      <!-- Peer Status on Send Page -->
+      <div class="peer-status send-peer-status" id="send-peer-status">
+        <span class="peer-dot offline"></span>
+        <span class="peer-label">Recipient offline</span>
+      </div>
+      <textarea class="send-area" id="msg-text" placeholder="Type a message..." maxlength="300" aria-label="Write your anonymous message"></textarea>
+      <div class="char-counter" id="char-counter">0 / 300</div>
+      <button class="btn-grad" id="btn-send-msg" aria-label="Send message">Send</button>
+    </div>
+  </div>
+
+  <!-- 12. READ -->
+  <div class="scr" id="read">
+    <div class="topbar topbar-center">
+      <button class="btn-back" id="btn-back-read">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <h1 class="topbar-title">Message</h1>
+    </div>
+    <div class="read-wrap">
+      <div class="read-card"><p id="read-text">Message content...</p><div class="time" id="read-time">11m ago</div></div>
+      <div class="reply-box">
+        <textarea placeholder="Write a reply..."></textarea>
+        <button class="btn-grad" style="margin-bottom:12px;">Post reply</button>
+        <div class="tog-row"><p>Share publicly</p><div class="tog on" id="tog-public"><div class="tog-k"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHEET -->
+  <div class="sheet-overlay" id="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-item" id="sheet-tutorial">How to share the link</div>
+      <div class="sheet-divider"></div>
+      <div class="sheet-item" id="sheet-instagram">Follow our Instagram</div>
+      <div class="sheet-divider"></div>
+      <div class="sheet-item" id="sheet-settings">Settings</div>
+      <button class="sheet-cancel" id="sheet-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- BUBBLE NAV -->
+  <nav class="bubble-nav" id="mainNav" style="display:none;">
+    <div class="bubble-indicator" id="indicator"></div>
+    <button class="nav-item active" data-index="0" data-tab="play">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Play</span>
+    </button>
+    <button class="nav-item" data-index="1" data-tab="inbox">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+      <span>Inbox</span>
+    </button>
+    <button class="nav-item" data-index="2" data-tab="settings">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+</div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="src/peer.js"></script>
+<script src="src/main.js"></script>
+<script>
+  // Register Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(() => {
+      console.log('[SW] Registered');
+    }).catch((err) => console.log('[SW] Error:', err));
+  }
+</script>
+</body>
+</html>
